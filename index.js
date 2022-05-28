@@ -75,11 +75,11 @@ async function run(){
     //   });
         
           //Get Rating
-    // app.get("/rating", async (req, res) => {
-    //     const cursor = ratingCollection.find({});
-    //     const rating = await cursor.toArray();
-    //     res.json(rating);
-    //   });
+    app.get("/rating", async (req, res) => {
+        const cursor = ratingCollection.find({});
+        const rating = await cursor.toArray();
+        res.json(rating);
+      });
 
     }
     finally{
