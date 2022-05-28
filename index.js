@@ -67,12 +67,12 @@ async function run(){
 
         // get orders by email
 
-    // app.get("/myOrders/:email", async (req, res) => {
-    //     const email = req.params.email;
-    //     const filter = { email: email };
-    //     const order = await orderCollection.find(filter).toArray();
-    //     res.json(order);
-    //   });
+    app.get("/myOrders/:email", async (req, res) => {
+        const email = req.params.email;
+        const filter = { email: email };
+        const order = await orderCollection.find(filter).toArray();
+        res.json(order);
+      });
         
           //Get Rating
     app.get("/rating", async (req, res) => {
