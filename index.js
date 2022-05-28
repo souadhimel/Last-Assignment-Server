@@ -59,7 +59,7 @@ async function run(){
         // Get Single package
         app.get("/service/:id", async (req, res) => {
           const id = req.params;
-          console.log("getting specific place", id);
+          console.log("getting specific service", id);
           const query = { _id: ObjectId(id) };
           const service = await serviceCollection.findOne(query);
           res.send(service);
@@ -71,6 +71,7 @@ async function run(){
         const email = req.params.email;
         const filter = { email: email };
         const order = await orderCollection.find(filter).toArray();
+        console.log(order);
         res.json(order);
       });
         
@@ -79,6 +80,23 @@ async function run(){
         const cursor = ratingCollection.find({});
         const rating = await cursor.toArray();
         res.json(rating);
+      });
+
+
+       // DELETE a service
+    app.delete("/service/:id", async (req, res) => {
+        const id = req.params.id;
+        const query = { _id: ObjectId(id) };
+        const result = await serviceCollection.deleteOne(query);
+        res.json(result);
+      });
+
+    // cancel an order
+    app.delete("/myOrders/:id", async (req, res) => {
+        const id = req.params.id;
+        const query = { _id: ObjectId(id) };
+        const result = await orderCollection.deleteOne(query);
+        res.json(result);
       });
 
     }
