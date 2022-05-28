@@ -10,35 +10,76 @@ const port=process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-const uri = `mongodb://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0-shard-00-00.7bquc.mongodb.net:27017,cluster0-shard-00-01.7bquc.mongodb.net:27017,cluster0-shard-00-02.7bquc.mongodb.net:27017/?ssl=true&replicaSet=atlas-uw0a6t-shard-0&authSource=admin&retryWrites=true&w=majority`;
 
+const uri = `mongodb://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0-shard-00-00.bv0uy.mongodb.net:27017,cluster0-shard-00-01.bv0uy.mongodb.net:27017,cluster0-shard-00-02.bv0uy.mongodb.net:27017/?ssl=true&replicaSet=atlas-ot6iab-shard-0&authSource=admin&retryWrites=true&w=majority`;
+console.log(uri);
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
+
 
 async function run(){
 
     try{
         await client.connect();
-        const serviceCollection = client.db('furnitureMart').collection('services');
+
+        const serviceCollection=client.db('carBiz').collection('service')
+        const orderCollection=client.db('carUser').collection('order')
+        const ratingCollection=client.db('carRating').collection('rating')
+
+        // Create service (POST)
+        app.post("/service",async(req, res) => {
+          const service=req.body;
+          const result=await serviceCollection.insertOne(service);
+          res.json(result);
         
-
-        // getting services
-        app.get('/services', async(req, res) => {
-            const query={};
-            const cursor=serviceCollection.find(query);
-            const services=await cursor.toArray();
-            res.send(services);
-
         });
 
+        // insert order
+        app.post("/myOrders",async(req, res) => {
+            const order=req.body;
+            const result=await orderCollection.insertOne(order);
+            res.send(result); 
+          });
 
-        // getting single service
-        app.get('/services/:id', async (req, res) => {
-            const id=req.params.id;
-            const query={_id:ObjectId(id)};
-            const service=await serviceCollection.findOne(query);
-            res.send(service);
+    // POST Review
+    app.post("/rating", async (req, res) => {
+        const rating = req.body;
+        const result = await ratingCollection.insertOne(rating);
+        res.json(result);
+      });
+        
+        // getting service
+        app.get("/service",async(req,res)=>{
+          const query={}
+          const cursor=serviceCollection.find(query)
+          const services=await cursor.toArray()
+          res.send(services)
+        });
+        
+        
+        // Get Single package
+        app.get("/service/:id", async (req, res) => {
+          const id = req.params;
+          console.log("getting specific place", id);
+          const query = { _id: ObjectId(id) };
+          const service = await serviceCollection.findOne(query);
+          res.send(service);
         });
 
+        // get orders by email
+
+    // app.get("/myOrders/:email", async (req, res) => {
+    //     const email = req.params.email;
+    //     const filter = { email: email };
+    //     const order = await orderCollection.find(filter).toArray();
+    //     res.json(order);
+    //   });
+        
+          //Get Rating
+    // app.get("/rating", async (req, res) => {
+    //     const cursor = ratingCollection.find({});
+    //     const rating = await cursor.toArray();
+    //     res.json(rating);
+    //   });
 
     }
     finally{
@@ -56,6 +97,15 @@ app.get('/', (req, res) => {
 app.listen(port, () => {
 console.log('Listening on port',port);
 })
+
+
+
+
+
+
+
+
+
 
 
 
