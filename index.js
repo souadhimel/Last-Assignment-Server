@@ -149,6 +149,33 @@ const updateDocument = {
   });
 
 
+  // Status update
+   app.put("/update/order/:id", async (req, res) => {
+    const id = req.params.id;
+    console.log(id);
+    const updatedOrder = req.body;
+    const filter = { _id: ObjectId(id) };
+    const options = { upsert: true };
+    const updateDoc = {
+      $set: {
+        status: updatedOrder.status,
+      },
+    };
+    const result = await orderCollection.updateOne(
+      filter,
+      updateDoc,
+      options
+    );
+    console.log("updating", id);
+    res.json(result);
+  });
+
+
+
+
+
+
+
 //   ....................DELETE..........................
 
        // DELETE a service
