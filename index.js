@@ -12,6 +12,7 @@ app.use(express.json());
 
 
 const uri = `mongodb://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0-shard-00-00.bv0uy.mongodb.net:27017,cluster0-shard-00-01.bv0uy.mongodb.net:27017,cluster0-shard-00-02.bv0uy.mongodb.net:27017/?ssl=true&replicaSet=atlas-ot6iab-shard-0&authSource=admin&retryWrites=true&w=majority`;
+console.log(uri);
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
 
