@@ -151,7 +151,7 @@ const updateDocument = {
 
 
   // Status update
-   app.put("/update/order/:id", async (req, res) => {
+   app.put("/order/update/:id", async (req, res) => {
     const id = req.params.id;
     console.log(id);
     const updatedOrder = req.body;
@@ -206,6 +206,9 @@ run().catch(console.dir);
 
 app.get('/', (req, res) => {
    res.send('Hey, running last assignment!') 
+});
+app.get('/test', (req, res) => {
+   res.send('Hey, I am testing!') 
 });
 
 app.listen(port, () => {
